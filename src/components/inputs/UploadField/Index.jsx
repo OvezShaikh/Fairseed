@@ -1,14 +1,14 @@
-import React, { useRef } from "react";
-import { FormLabel, InputBase } from "@mui/material";
-import { colors } from "../../../constants/theme";
-import { RxCross2 } from "react-icons/rx";
-import { useField, ErrorMessage } from "formik";
-import images from "../../../constants/images";
+import React, { useRef } from 'react';
+import { FormLabel, InputBase } from '@mui/material';
+import { colors } from '../../../constants/theme';
+import { RxCross2 } from 'react-icons/rx';
+import { useField, ErrorMessage } from 'formik';
+import images from '../../../constants/images';
 
 const UploadField = ({
   variant,
   multiple = false,
-  label = "",
+  label = '',
   name,
   placeholder,
   onChange,
@@ -19,97 +19,118 @@ const UploadField = ({
   const [field, meta, handlers] = useField(name);
 
   const handleFileChange = (event) => {
-    const file = multiple ? event.target.files : event.target.files[0];
+    // const file = multiple ? event.target.files : event.target.files[0];
+    const file = multiple
+      ? Array.from(event.target.files)
+      : event.target.files[0];
 
     if (file) {
       handlers.setValue(file);
       handlers.setTouched(true);
     }
   };
+  const getDisplayValue = () => {
+    if (!field.value) return '';
+    if (Array.isArray(field.value)) {
+      return field.value.map((f) => f.name).join(', ');
+    }
+    if (field.value instanceof FileList) {
+      return Array.from(field.value)
+        .map((f) => f.name)
+        .join(', ');
+    }
+    if (field.value.name) {
+      return field.value.name;
+    }
+    return '';
+  };
 
   const configTextfield = {
     ...field,
     ...otherProps,
     fullWidth: true,
-    variant: variant ? variant : "outlined",
+    variant: variant ? variant : 'outlined',
   };
 
   return (
-    <div className="">
+    <div className=''>
       {label && (
         <FormLabel
-          className="text-capitalize font-medium d-flex align-items-center"
+          className='text-capitalize font-medium d-flex align-items-center'
           sx={{
-            padding: "4px 8px 12px 8px",
+            padding: '4px 8px 12px 8px',
             color: colors.text.main,
-            fontSize: "1.2rem",
+            fontSize: '1.2rem',
             fontWeight: 700,
-            fontFamily: "satoshi",
-            fontStyle: "normal",
-            height: "32px",
+            fontFamily: 'satoshi',
+            fontStyle: 'normal',
+            height: '32px',
           }}
         >
           {label}
-          {required ? <span className="text-red-600">*</span> : ""}
+          {required ? <span className='text-red-600'>*</span> : ''}
         </FormLabel>
       )}
 
-      <div className="flex w-full desktop:h-[64px] max-desktop:h-[64px] max-tablet:h-[48px] Upload_field">
+      <div className='flex w-full desktop:h-[64px] max-desktop:h-[64px] max-tablet:h-[48px] Upload_field'>
         <InputBase
           multiple={multiple}
-          value={field.value ? field.value.name : ""}
+          {...configTextfield}
+          // value={field.value ? field.value.name : ''}
+          value={getDisplayValue()}
           placeholder={placeholder}
           label={label}
           sx={{
-            "& .MuiInputBase-input": {
-              padding: "10px",
-              fontSize: "1rem",
+            '& .MuiInputBase-input': {
+              padding: '10px',
+              fontSize: '1rem',
             },
           }}
           fullWidth
           inputProps={{
             readOnly: true,
             placeholder: placeholder,
-            value: field.value ? field.value.name : "",
+            // value: field.value ? field.value.name : '',
+            value: getDisplayValue(),
           }}
           {...configTextfield}
           disabled
         />
         <>
           <input
-            type="file"
+            type='file'
             multiple={multiple}
             ref={ref}
-            style={{ display: "none" }}
-            id={`file - input - ${name}`} // Unique ID for each input
+            style={{ display: 'none' }}
+            id={`file-input-${name}`} // Unique ID for each input
             onChange={handleFileChange}
           />
 
-          <label
-            htmlFor={`file - input - ${name}`} // Matching ID for the corresponding input
-            className="flex justify-center gap-2 items-center"
-          >
+          <div className='flex justify-center gap-2 items-center'>
             {field.value ? (
               <RxCross2
                 size={25}
-                color="gray"
-                onClick={() => {
-                  handlers.setValue();
+                color='gray'
+                style={{ cursor: 'pointer' }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlers.setValue('');
                 }}
               />
             ) : (
-              ""
+              ''
             )}
             {/* You may want to add onClick for focusing on the input */}
             <img
               width={64}
               height={64}
-              className="flex justify-stretch ml-1"
+              className='flex justify-stretch ml-1'
               src={images.UploadFile}
-              alt=""
-              onClick={() => ref?.current?.focus()}
+              alt='UploadFile'
+              // onClick={() => ref?.current?.focus()}
+              onClick={() => ref?.current?.click()}
             />
-          </label>
+          </div>
         </>
       </div>
       <ErrorMessage
@@ -117,10 +138,10 @@ const UploadField = ({
         render={(msg) => (
           <div
             style={{
-              fontFamily: "satoshi",
-              color: "red",
-              fontSize: "1rem",
-              paddingLeft: "5px",
+              fontFamily: 'satoshi',
+              color: 'red',
+              fontSize: '1rem',
+              paddingLeft: '5px',
             }}
           >
             {msg}
