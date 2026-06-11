@@ -1,14 +1,14 @@
-import React, { useRef } from "react";
-import { FormLabel, InputBase } from "@mui/material";
-import { colors } from "../../../constants/theme";
-import { RxCross2 } from "react-icons/rx";
-import { useField, ErrorMessage } from "formik";
-import images from "../../../constants/images";
+import React, { useRef } from 'react';
+import { FormLabel, InputBase } from '@mui/material';
+import { colors } from '../../../constants/theme';
+import { RxCross2 } from 'react-icons/rx';
+import { useField, ErrorMessage } from 'formik';
+import images from '../../../constants/images';
 
 const UploadField = ({
   variant,
   multiple = true,
-  label = "",
+  label = '',
   name,
   required,
   placeholder,
@@ -33,86 +33,113 @@ const UploadField = ({
     handlers.setTouched(true);
   };
 
+  const getDisplayValue = () => {
+    if (!field.value) return '';
+    if (Array.isArray(field.value)) {
+      return field.value.map((f) => f.name).join(', ');
+    }
+    if (field.value instanceof FileList) {
+      return Array.from(field.value)
+        .map((f) => f.name)
+        .join(', ');
+    }
+    if (field.value.name) {
+      return field.value.name;
+    }
+    return '';
+  };
   const configTextfield = {
     ...field,
     ...otherProps,
     fullWidth: true,
-    variant: variant ? variant : "outlined",
+    variant: variant ? variant : 'outlined',
   };
 
   return (
-    <div className="">
+    <div className=''>
       {label && (
         <FormLabel
-          className="text-capitalize font-medium d-flex align-items-center"
+          className='text-capitalize font-medium d-flex align-items-center'
           sx={{
-            padding: "4px 8px 8px 8px",
+            padding: '4px 8px 8px 8px',
             color: colors.text.main,
-            fontSize: "1rem",
+            fontSize: '1rem',
             fontWeight: 700,
-            fontFamily: "satoshi",
-            fontStyle: "normal",
+            fontFamily: 'satoshi',
+            fontStyle: 'normal',
           }}
         >
           {label}
-          {required ? <span className="text-red-600">*</span> : ""}
+          {required ? <span className='text-red-600'>*</span> : ''}
         </FormLabel>
       )}
 
-      <div className="flex w-full h-[50px] Upload_admin_field">
+      <div className='flex w-full h-[50px] Upload_admin_field'>
         <InputBase
-          value={field.value ? field.value.name : ""}
+          // value={field.value ? field.value.name : ''}
+          {...configTextfield}
+          value={getDisplayValue()}
           placeholder={placeholder}
           label={label}
           sx={{
-            "& .MuiInputBase-input": {
-              padding: "10px",
-              fontSize: "1rem",
+            '& .MuiInputBase-input': {
+              padding: '10px',
+              fontSize: '1rem',
             },
           }}
           fullWidth
           inputProps={{
             readOnly: true,
             placeholder: placeholder,
-            value: field.value ? field.value.name : "",
+            // value: field.value ? field.value.name : '',
+            value: getDisplayValue(),
           }}
           {...configTextfield}
           disabled
         />
         <>
           <input
-            type="file"
+            type='file'
             ref={ref}
-            style={{ display: "none" }}
-            id={`file - input - ${name}`}
+            style={{ display: 'none' }}
+            // id={`file - input - ${name}`}
+            id={`file-input-${name}`}
             multiple={multiple}
             onChange={handleFileChange}
           />
 
-          <label
+          {/* <label
             htmlFor={`file - input - ${name}`}
-            className="flex justify-center gap-2 items-center"
-          >
+            className='flex justify-center gap-2 items-center'
+          > */}
+          <div className='flex justify-center gap-2 items-center'>
             {field.value ? (
               <RxCross2
                 size={25}
-                color="gray"
-                onClick={() => {
-                  handlers.setValue();
+                color='gray'
+                style={{ cursor: 'pointer' }}
+                // onClick={() => {
+                //   handlers.setValue();
+                // }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlers.setValue('');
                 }}
               />
             ) : (
-              ""
+              ''
             )}
             <img
               width={49}
               height={37}
-              className="flex justify-stretch ml-1"
+              className='flex justify-stretch ml-1'
               src={images.UploadFile}
-              alt=""
-              onClick={() => ref?.current?.focus()}
+              style={{ cursor: 'pointer' }}
+              alt=''
+              // onClick={() => ref?.current?.focus()}
+              onClick={() => ref?.current?.click()}
             />
-          </label>
+          </div>
         </>
       </div>
       <ErrorMessage
@@ -120,10 +147,10 @@ const UploadField = ({
         render={(msg) => (
           <div
             style={{
-              fontFamily: "satoshi",
-              color: "red",
-              fontSize: "1rem",
-              paddingLeft: "5px",
+              fontFamily: 'satoshi',
+              color: 'red',
+              fontSize: '1rem',
+              paddingLeft: '5px',
             }}
           >
             {msg}

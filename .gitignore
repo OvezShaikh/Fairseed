@@ -1,8 +1,9 @@
+# Dependencies
 node_modules/
-/node_modules
-.node_modules   
 
-
-/.git/
+# Environment variables
 .env
+.env*.local
 
+# System/Git folders (usually ignored by default, but safe to keep)
+/.git/

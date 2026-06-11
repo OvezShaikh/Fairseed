@@ -11,12 +11,10 @@ import { Container } from "@mui/system";
 import { Link, useNavigate } from "react-router-dom";
 import ForgotPassword from "../ForgotPassword/Index";
 import AuthContext from "../../../context/authContext/AuthContext";
-import * as yup from "yup"
+import * as yup from "yup";
 import { useCreateOrUpdate } from "../../../Hooks";
 import { toast } from "react-toastify";
 import errorHandle from "../../../utils/errorHandle";
-
-
 
 const StyledTypography = styled(Typography)({
   background:
@@ -30,149 +28,143 @@ const StyledTypography = styled(Typography)({
   fontStyle: "normal",
 });
 
-const Formcom = (
+const Formcom = () =>
   // { Initial_value, formValidation, loginData }
-) => {
-  const { Login }= useContext(AuthContext)
-  const navigate = useNavigate();
+  {
+    const { Login } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-  const InitialValues = {
-    email:"",
-    password:""
-  }
+    const InitialValues = {
+      email: "",
+      password: "",
+    };
 
-  const { mutate } = useCreateOrUpdate({
-    url:`/accounts/login/nt/`
-  })
+    const { mutate } = useCreateOrUpdate({
+      url: `/accounts/login/nt/`,
+    });
 
-  const validations = yup.object({
-    email: yup
-      .string()
-      .email()
-      .trim("This field cannot include leading and trailing spaces")
-      .strict(true)
-      .required("Email is required!"),
-  });
+    const validations = yup.object({
+      email: yup
+        .string()
+        .email()
+        .trim("This field cannot include leading and trailing spaces")
+        .strict(true)
+        .required("Email is required!"),
+    });
 
+    return (
+      <div className='w-[65%] '>
+        <div className='flex flex-col w-full'>
+          <StyledTypography
+            component='h4'
+            variant='h4'
+            sx={{
+              marginTop: "38px",
+              fontFamily: "Epilogue",
+            }}>
+            Login
+          </StyledTypography>
+          <hr className='text-gray-500  pt-2' />
+          <h1
+            style={{
+              fontSize: "1.2rem",
+              fontWeight: 500,
+              color: "var(--Neutral-Neutral-7, #717171)",
+              fontFamily: "satoshi",
+              letterSpacing: "0.88px",
+              padding: "10px 0 30px 0",
+            }}>
+            Welcome Back! Please enter you details
+          </h1>
+        </div>
 
-  return (
-    <div className="w-[65%] ">
-      <div className="flex flex-col w-full">
-        <StyledTypography
-          component="h4"
-          variant="h4"
-          sx={{
-            marginTop: "38px",
-            fontFamily: "Epilogue",
-          }}
-        >
-          Login
-        </StyledTypography>
-        <hr className="text-gray-500  pt-2" />
-        <h1
-          style={{
-            fontSize: "1.2rem",
-            fontWeight: 500,
-            color: "var(--Neutral-Neutral-7, #717171)",
-            fontFamily: "satoshi",
-            letterSpacing: "0.88px",
-            padding: "10px 0 30px 0",
-          }}
-        >
-          Welcome Back! Please enter you details
-        </h1>
+        <Formik
+          initialValues={InitialValues}
+          validationSchema={validations}
+          onSubmit={(values) => {
+            mutate(values, {
+              onSuccess: (data) => {
+                toast.success("logged In !");
+                const LoggedIn = Login(data?.data);
+                if (LoggedIn) {
+                  navigate("/");
+                }
+              },
+              onError: (response) => {
+                let message = response.response.data.message;
+                toast.error(message);
+              },
+            });
+          }}>
+          <Form>
+            <div>
+              <Grid container spacing={4}>
+                <Grid item xs={12}>
+                  <InputField
+                    Size={18}
+                    label='Email'
+                    name='email'
+                    sx={{
+                      padding: " 8px 10px 8px var(--Spacing-20, 20px)",
+                      border: "2px solid var(--Linear-BG, #FF9F0A)",
+                      borderImage: "linear-gradient(#FF9F0A, red) 20",
+                      // borderWidth: '3px',
+                      borderStyle: " solid",
+                      borderRadius: "4px",
+                    }}
+                    placeholder='enter your email'
+                  />
+                </Grid>
+                <Grid item xs={12} className='mt-10'>
+                  <InputField
+                    top={"28px"}
+                    label='Password'
+                    type='password'
+                    name='password'
+                    Size={18}
+                    sx={{
+                      padding: " 8px 10px 8px 10px",
+                      border: "2px solid var(--Linear-BG, #FF9F0A)",
+                      borderImage: "linear-gradient(#FF9F0A, red) 20",
+                      // borderWidth: '3px',
+                      borderStyle: " solid",
+                      borderRadius: "4px",
+                    }}
+                    placeholder='************'
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  container
+                  alignItems='center'
+                  justifyContent='space-between'>
+                  <CheckBox label='Remember Me' name={"remember_me"} />
+                  <div style={{ width: "20px" }}></div>
+                  <h1>
+                    <ForgotPassword />
+                  </h1>
+                </Grid>
+                <Grid item xs={12}>
+                  <PrimaryButton
+                    sx={{ width: "100%", padding: "12px 40px" }}
+                    type='submit'>
+                    <span style={{ fontSize: "1.4rem", fontWeight: 900 }}>
+                      {" "}
+                      Sign In{" "}
+                    </span>
+                  </PrimaryButton>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <UserSignUp_02 />
+                </Grid>
+              </Grid>
+            </div>
+          </Form>
+        </Formik>
       </div>
-
-      <Formik
-        initialValues={InitialValues}
-        validationSchema={validations}
-        onSubmit={(values)=>{
-          mutate(values ,{
-            onSuccess:(data)=>{
-              toast.success("logged In !");
-              const LoggedIn = Login(data?.data);
-              if(LoggedIn){
-                navigate("/")
-              }
-            },
-            onError:(response)=> {
-              let message = response.response.data.message;
-              toast.error(message)
-            }
-          })
-        }}
-      >
-        <Form>
-          <div>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
-                <InputField
-                  Size={18}
-                  label="Email"
-                  name="email"
-                  sx={{
-                    padding: " 8px 10px 8px var(--Spacing-20, 20px)",
-                    border: "2px solid var(--Linear-BG, #FF9F0A)",
-                    borderImage: "linear-gradient(#FF9F0A, red) 20",
-                    // borderWidth: '3px',
-                    borderStyle: " solid",
-                    borderRadius: "4px",
-                  }}
-                  placeholder="enter your email"
-                />
-              </Grid>
-              <Grid item xs={12} className="mt-10">
-                <InputField
-                  top={"28px"}
-                  label="Password"
-                  type="password"
-                  name="password"
-                  Size={18}
-                  sx={{
-                    padding: " 8px 10px 8px 10px",
-                    border: "2px solid var(--Linear-BG, #FF9F0A)",
-                    borderImage: "linear-gradient(#FF9F0A, red) 20",
-                    // borderWidth: '3px',
-                    borderStyle: " solid",
-                    borderRadius: "4px",
-                  }}
-                  placeholder="************"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                container
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <CheckBox label="Remember Me" name={"remember_me"} />
-                <div style={{ width: "20px" }}></div>
-                <h1>
-                  <ForgotPassword />
-                </h1>
-              </Grid>
-              <Grid item xs={12}>
-                <PrimaryButton
-                  sx={{ width: "100%", padding: "12px 40px" }}
-                  type="submit"
-                >
-                  <span style={{ fontSize: "1.4rem", fontWeight: 900 }}>
-                    {" "}
-                    Sign In{" "}
-                  </span>
-                </PrimaryButton>
-              </Grid>
-
-              <Grid item xs={12}>
-                <UserSignUp_02 />
-              </Grid>
-            </Grid>
-          </div>
-        </Form>
-      </Formik>
-    </div>
-  );
-};
+    );
+  };
 
 export default Formcom;

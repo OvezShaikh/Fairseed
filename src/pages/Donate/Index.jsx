@@ -126,13 +126,12 @@ function Index({ goalAmount, fundRaised }) {
     formData.append("campaign", cardDetails?.id);
     formData.append("transaction_date", values?.transaction_date);
     formData.append("bank_name", values?.bank_name);
-    formData.append("full_name", user?.username || values?.full_name);
-    formData.append("country", user?.country || values?.country);
-    formData.append("email", user?.email || values?.email);
-    formData.append("city", user?.city || values?.city);
-    formData.append("mobile", user?.mobile_number || values?.mobile);
+    formData.append("full_name", values?.full_name || user?.username || "");
+    formData.append("country", values?.country || user?.country || "");
+    formData.append("email", values?.email || user?.email || "");
+    formData.append("city", values?.city || user?.city || "");
+    formData.append("mobile", values?.mobile || user?.mobile_number || "");
     if (user !== null) formData.append("user", user?.id);
-
     mutate(formData, {
       onSuccess: (response) => {
         if (selectedPaymentGateway === "Bank_Transfer") {

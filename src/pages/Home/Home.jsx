@@ -1,27 +1,27 @@
-import React from "react";
-import "./Home.css";
+import React from 'react';
+import './Home.css';
 
-import button from "../../constants/button";
-import Card from "../../components/layout/Card";
-import ScrollableTabsButtonForce from "../../components/layout/ScrollableTabsButtonAuto";
-import Carousal from "../../components/layout/Carousal";
-import Footer from "../../components/layout/Footer";
-import Navbar from "../../components/layout/Navbar";
-import DashBoard from "../../components/layout/DashBoard";
-import PrimaryButton from "../../components/inputs/PrimaryButton";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import UserNavbar from "../login/UserNavbar";
+import button from '../../constants/button';
+import Card from '../../components/layout/Card';
+import ScrollableTabsButtonForce from '../../components/layout/ScrollableTabsButtonAuto';
+import Carousal from '../../components/layout/Carousal';
+import Footer from '../../components/layout/Footer';
+import Navbar from '../../components/layout/Navbar';
+import DashBoard from '../../components/layout/DashBoard';
+import PrimaryButton from '../../components/inputs/PrimaryButton';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import UserNavbar from '../login/UserNavbar';
 
-import images from "../../constants/images";
-import { color } from "@mui/system";
-import { Link } from "react-router-dom";
+import images from '../../constants/images';
+import { color } from '@mui/system';
+import { Link } from 'react-router-dom';
 
-import BottomSlider from "../../components/layout/BottomSlider/Index";
+import BottomSlider from '../../components/layout/BottomSlider/Index';
 
-import FilterField from "../../components/inputs/FilterField/Index";
-import UserLogin from "../login/Login_page/Index";
-import SelectWithCheckboxes from "../../components/inputs/FilterField/Ff2";
+import FilterField from '../../components/inputs/FilterField/Index';
+import UserLogin from '../login/Login_page/Index';
+import SelectWithCheckboxes from '../../components/inputs/FilterField/Ff2';
 
 function Home() {
   const [userList, setUserList] = useState([]);
@@ -31,45 +31,48 @@ function Home() {
   const [campaignCount, setCampaignCount] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
   const [perPage, setPerPage] = useState(100);
-  const [tabName, setTabName] = useState("newly_added");
-  const [categoryDataFromChild, setCategoryDataFromChild] = useState("");
-  const [locationDataFromChild, setLocationDataFromChild] = useState("");
-  const [filterName, setFilterName] = useState("");
+  const [tabName, setTabName] = useState('newly_added');
+  const [categoryDataFromChild, setCategoryDataFromChild] = useState('');
+  const [locationDataFromChild, setLocationDataFromChild] = useState('');
+  const [filterName, setFilterName] = useState('');
 
   const [visibleCards, setVisibleCards] = useState(8);
 
   const receiveCategoryFromChild = (categoryData) => {
     setCategoryDataFromChild(categoryData);
-    console.log(categoryData, "categoryData");
+    console.log(categoryData, 'categoryData');
   };
 
   const receiveLocationFromChild = (locationData) => {
     setLocationDataFromChild(locationData);
-    console.log(locationData, "locationData");
+    console.log(locationData, 'locationData');
   };
 
   const handleTabChange = (index, label) => {
     switch (label) {
-      case "Newly Added":
-        setTabName("newly_added");
+      case 'Newly Added':
+        setTabName('newly_added');
         break;
-      case "Most Supported":
-        setTabName("most_supported");
+      case 'Most Supported':
+        setTabName('most_supported');
         break;
-      case "Needs Love":
-        setTabName("needs_love");
+      case 'Needs Love':
+        setTabName('needs_love');
         break;
-      case "Expiring Soon":
-        setTabName("expiring_soon");
+      case 'Expiring Soon':
+        setTabName('expiring_soon');
         break;
-      case "Trending":
-        setTabName("trending");
+      case 'Trending':
+        setTabName('trending');
         break;
-      case "Completed":
-        setTabName("completed");
+      case 'Completed':
+        setTabName('completed');
+        break;
+      case 'Completed':
+        setTabName('completed');
         break;
       default:
-        setTabName("");
+        setTabName('');
     }
   };
 
@@ -89,8 +92,8 @@ function Home() {
 
           return isDataMatch;
         })
-        .map((item) => item.id)
-    )
+        .map((item) => item.id),
+    ),
   ).map((id) => userList.find((item) => item.id === id));
 
   const filteredCardCount = filteredUserList.length;
@@ -114,7 +117,7 @@ function Home() {
   const fetchUserListFromTabs = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/campaign/campaign-filter?page=${page}&limit=${perPage}&filter=${tabName}`
+        `${process.env.REACT_APP_API_URL}/campaign/campaign-filter?page=${page}&limit=${perPage}&filter=${tabName}`,
       );
       const res = response.data;
       setFilterName(res.filter_key);
@@ -123,10 +126,10 @@ function Home() {
         setUserList(res.rows);
         setCampaignCount(res.count);
       } else {
-        console.error("Invalid data structure. Expected an array:", res.data);
+        console.error('Invalid data structure. Expected an array:', res.data);
       }
     } catch (error) {
-      console.error("Error fetching user list:", error);
+      console.error('Error fetching user list:', error);
     }
   };
 
@@ -137,7 +140,7 @@ function Home() {
   const fetchCampaigns = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/campaign/campaign-filter?page=${page}&limit=${perPage}&filter=${tabName}`
+        `${process.env.REACT_APP_API_URL}/campaign/campaign-filter?page=${page}&limit=${perPage}&filter=${tabName}`,
       );
       const res = response.data;
       if (Array.isArray(res.rows)) {
@@ -145,10 +148,10 @@ function Home() {
         setUserList([...userList, ...res.rows]);
         setCampaignCount(res.count);
       } else {
-        console.error("Invalid data structure. Expected an array:", res.data);
+        console.error('Invalid data structure. Expected an array:', res.data);
       }
     } catch (error) {
-      console.error("Error fetching user list:", error);
+      console.error('Error fetching user list:', error);
     }
   };
   useEffect(() => {
@@ -166,11 +169,12 @@ function Home() {
       <div
         className='bg-[#FFF6F5] desktop:justify-between max-desktop:flex-wrap max-desktop:justify-center max-desktop:gap-y-[64px] desktop:px-[48px] desktop:py-[48px] max-desktop:py-[80px] max-tablet:py-[60px] max-tablet:gap-y-[32px]'
         style={{
-          width: "100%",
-          height: "100%",
-          alignItems: "flex-start",
-          display: "flex",
-        }}>
+          width: '100%',
+          height: '100%',
+          alignItems: 'flex-start',
+          display: 'flex',
+        }}
+      >
         <DashBoard />
       </div>
       <div className='flex pt-[128px] max-tablet:pt-[64px]'>
@@ -178,46 +182,46 @@ function Home() {
           {/* Title */}
           <h1
             className='font-extrabold pb-[24px] desktop:text-[3rem] max-desktop:text-[2.25rem] max-tablet:text-[1.5rem] max-tablet:pb-[20px]'
-            style={{
-              fontFamily: "Satoshi",
-              textAlign: "center",
-            }}>
+            style={{ fontFamily: 'Satoshi' }}
+          >
             Campaigns: Ongoing & Completed
           </h1>
-
-          {/* Description */}
           <div
             className='flex flex-col items-center text-center font-[1.5rem] mb-[64px] max-tablet:mb-[52px]'
-            style={{ fontFamily: "Satoshi", fontWeight: "500" }}>
+            style={{ fontFamily: 'Satoshi', fontWeight: '500' }}
+          >
             <p
               className='max-tablet:text-[1rem] max-desktop:text-[1.25rem]'
               style={{
-                fontSize: "1.5rem",
-                wordWrap: "break-word",
-                textAlign: "center",
-              }}>
-              See all{" "}
+                fontSize: '1.5rem',
+                wordWrap: 'break-word',
+                textAlign: 'center',
+              }}
+            >
+              See all{' '}
               <Link
                 to='/Home/OnGoingCampaigns'
                 style={{
                   background:
-                    "linear-gradient(to right, #FF9F0A 0%, #FF375F 62.9%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  textDecoration: "underline",
-                }}>
-                {campaignCount} active campaigns
-              </Link>{" "}
-              or{" "}
+                    'linear-gradient(to right, #FF9F0A 0%, #FF375F 62.9%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textDecoration: 'underline',
+                }}
+              >
+                active campaigns
+              </Link>{' '}
+              or{' '}
               <Link
                 to='/Home/Successful-campaign'
                 style={{
                   background:
-                    "linear-gradient(to right, #FF9F0A 0%, #FF375F 62.9%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  textDecoration: "underline",
-                }}>
+                    'linear-gradient(to right, #FF9F0A 0%, #FF375F 62.9%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textDecoration: 'underline',
+                }}
+              >
                 completed campaigns
               </Link>
             </p>
@@ -230,19 +234,21 @@ function Home() {
           <ScrollableTabsButtonForce onTabChange={handleTabChange} />
           <button
             className='flex items-center ml-2 px-3 py-1.5 max-w-[115px] gap-x-[12px] max-desktop:px-[20px] max-desktop:py-[17px] max-tablet:py-[6px]'
-            style={{ backgroundColor: "rgba(255, 246, 245, 1)" }}
-            onClick={filterToggle}>
+            style={{ backgroundColor: 'rgba(255, 246, 245, 1)' }}
+            onClick={filterToggle}
+          >
             <img src={images.Funnel} alt='' />
             <p
               className='text-[1.1rem]'
               style={{
                 background:
-                  "linear-gradient(to right, #FF9F0A 0%, #FF375F 62.9%)",
-                "-webkit-background-clip": "text",
-                "-webkit-text-fill-color": "transparent",
-                "font-family": "Satoshi",
-                "font-weight": "700",
-              }}>
+                  'linear-gradient(to right, #FF9F0A 0%, #FF375F 62.9%)',
+                '-webkit-background-clip': 'text',
+                '-webkit-text-fill-color': 'transparent',
+                'font-family': 'Satoshi',
+                'font-weight': '700',
+              }}
+            >
               Filter
             </p>
           </button>
@@ -279,34 +285,37 @@ function Home() {
           disabled={visibleCards >= campaignCount}
           id='loadmorebutton'
           style={{
-            width: "fit-content",
-            textAlign: "center",
-            color: "#FF9F0A",
-            fontSize: "1.5rem",
-            fontFamily: "Satoshi",
-            fontWeight: "500",
-            textDecoration: "underline",
-            wordWrap: "break-word",
-            background: "linear-gradient(to right, #FF9F0A 0%, #FF375F 62.9%)",
-            "-webkit-background-clip": "text",
-            "-webkit-text-fill-color": "transparent",
-            textDecoration: "underline",
+            width: 'fit-content',
+            textAlign: 'center',
+            color: '#FF9F0A',
+            fontSize: '1.5rem',
+            fontFamily: 'Satoshi',
+            fontWeight: '500',
+            textDecoration: 'underline',
+            wordWrap: 'break-word',
+            background: 'linear-gradient(to right, #FF9F0A 0%, #FF375F 62.9%)',
+            '-webkit-background-clip': 'text',
+            '-webkit-text-fill-color': 'transparent',
+            textDecoration: 'underline',
             display:
               visibleCards >= campaignCount || filteredCardCount < 8
-                ? "none"
-                : "block",
-            position: "relative",
-          }}>
+                ? 'none'
+                : 'block',
+            position: 'relative',
+          }}
+        >
           <p className='gradient-button mb-0'>Load More</p>
         </button>
       </div>
       <section className='bg-[#FFF6F5]'>
         <div
           className='flex flex-col flex-wrap w-full   desktop:py-[128px] px-7  items-center max-desktop:py-[80px] max-tablet:py-[64px]'
-          style={{ backgroundColor: "rgba(255, 246, 245, 1)" }}>
+          style={{ backgroundColor: 'rgba(255, 246, 245, 1)' }}
+        >
           <h1
             className='font-bold pb-[96px] text-[3rem] max-desktop:pb-[48px] max-tablet:pb-[28px] max-tablet:text-[1.5rem]'
-            style={{ fontFamily: "Satoshi", fontWeight: 900 }}>
+            style={{ fontFamily: 'Satoshi', fontWeight: 900 }}
+          >
             How it Works
           </h1>
           <div className='flex desktop:max-w-[94%] desktop:justify-between mt-0 place-items-center w-full max-desktop:flex-col max-desktop:gap-y-[40px] desktop:mb-[96px] max-desktop:mb-[48px]'>
@@ -322,25 +331,27 @@ function Home() {
                   <h1
                     className='text-[2.25rem] font-black max-tablet:text-[1.5rem] max-tablet:font-bold'
                     style={{
-                      color: "#4A4E5A",
+                      color: '#4A4E5A',
 
-                      fontFamily: "Satoshi",
+                      fontFamily: 'Satoshi',
 
-                      wordWrap: "break-word",
-                    }}>
+                      wordWrap: 'break-word',
+                    }}
+                  >
                     Create your Profile
                   </h1>
                   <p
                     className='text-[1.5rem] max-tablet:text-[1.1rem] max-tablet:font-normal'
                     style={{
-                      width: "100%",
-                      color: "#6B7280",
+                      width: '100%',
+                      color: '#6B7280',
 
-                      fontFamily: "Satoshi",
+                      fontFamily: 'Satoshi',
 
-                      wordWrap: "break-word",
+                      wordWrap: 'break-word',
                       marginTop: 6,
-                    }}>
+                    }}
+                  >
                     Start with the basics
                     <br /> Kick things off with your
                     <br /> name and location.
@@ -365,25 +376,27 @@ function Home() {
                   <h1
                     className='text-[2.25rem] font-black max-tablet:text-[1.5rem] max-tablet:font-bold'
                     style={{
-                      color: "#4A4E5A",
+                      color: '#4A4E5A',
 
-                      fontFamily: "Satoshi ",
+                      fontFamily: 'Satoshi ',
 
-                      wordWrap: "break-word",
-                    }}>
+                      wordWrap: 'break-word',
+                    }}
+                  >
                     Fill Campaign Information
                   </h1>
                   <p
                     className='text-[1.5rem] max-tablet:text-[1.1rem] max-tablet:font-normal'
                     style={{
-                      width: "100%",
-                      color: "#6B7280",
+                      width: '100%',
+                      color: '#6B7280',
 
-                      fontFamily: "Satoshi",
+                      fontFamily: 'Satoshi',
 
-                      wordWrap: "break-word",
+                      wordWrap: 'break-word',
                       marginTop: 6,
-                    }}>
+                    }}
+                  >
                     Tell your story
                     <br /> We'll guide you with tips
                     <br /> along the way.
@@ -408,25 +421,27 @@ function Home() {
                   <h1
                     className='text-[2.25rem] font-black max-tablet:text-[1.5rem] max-tablet:font-bold'
                     style={{
-                      color: "#4A4E5A",
+                      color: '#4A4E5A',
 
-                      fontFamily: "Satoshi",
+                      fontFamily: 'Satoshi',
 
-                      wordWrap: "break-word",
-                    }}>
+                      wordWrap: 'break-word',
+                    }}
+                  >
                     Update Acc details
                   </h1>
                   <p
                     className='text-[1.5rem] max-tablet:text-[1.1rem] max-tablet:font-normal'
                     style={{
-                      width: "100%",
-                      color: "#6B7280",
+                      width: '100%',
+                      color: '#6B7280',
 
-                      fontFamily: "Satoshi",
+                      fontFamily: 'Satoshi',
 
-                      wordWrap: "break-word",
+                      wordWrap: 'break-word',
                       marginTop: 4,
-                    }}>
+                    }}
+                  >
                     Upload ID and a valid
                     <br /> account number. Our team
                     <br /> will verify the same.
@@ -435,20 +450,22 @@ function Home() {
               </div>
             </div>
           </div>
-          {localStorage.getItem("token") ? (
+          {localStorage.getItem('token') ? (
             <>
               <Link to='/Home/Create-Campaign'>
                 <PrimaryButton
                   sx={{
-                    borderRadius: "var(--Pixels-8, 8px)",
-                    fontSize: "1.2rem",
-                    fontWeight: "900",
-                    padding: "15px 28px 15px 28px",
+                    borderRadius: 'var(--Pixels-8, 8px)',
+                    fontSize: '1.2rem',
+                    fontWeight: '900',
+                    padding: '15px 28px 15px 28px',
                   }}
-                  className='py-[15px] px-[28px] my-10'>
+                  className='py-[15px] px-[28px] my-10'
+                >
                   <div
                     className='mr-2'
-                    style={{ width: 32, height: 32, position: "relative" }}>
+                    style={{ width: 32, height: 32, position: 'relative' }}
+                  >
                     <img src={images.RocketLaunch} alt='' />
                   </div>
                   <div className='max-tablet:text-[1rem]'>
@@ -462,31 +479,34 @@ function Home() {
               <div className='max-tablet:hidden max-desktop:hidden'>
                 <PrimaryButton
                   sx={{
-                    borderRadius: "var(--Pixels-8, 8px)",
-                    fontSize: "1.2rem",
-                    fontWeight: "900",
-                    padding: "15px 28px 15px 28px",
+                    borderRadius: 'var(--Pixels-8, 8px)',
+                    fontSize: '1.2rem',
+                    fontWeight: '900',
+                    padding: '15px 28px 15px 28px',
                   }}
-                  className='py-[15px] px-[28px] my-10'>
+                  className='py-[15px] px-[28px] my-10'
+                >
                   <div
                     className='mr-2'
-                    style={{ width: 32, height: 32, position: "relative" }}>
+                    style={{ width: 32, height: 32, position: 'relative' }}
+                  >
                     <img src={images.RocketLaunch} alt='' />
                   </div>
                   <div className='max-tablet:text-[1rem]'>
                     <h1
                       style={{
-                        color: "var(--Base-Colours-Text-Primary, #25272C)",
-                        fontSize: "1.2rem",
-                        fontFamily: "Satoshi ",
+                        color: 'var(--Base-Colours-Text-Primary, #25272C)',
+                        fontSize: '1.2rem',
+                        fontFamily: 'Satoshi ',
                         fontWeight: 700,
-                        wordWrap: "break-word",
-                      }}>
+                        wordWrap: 'break-word',
+                      }}
+                    >
                       <UserLogin
-                        text={"Launch a Campaign Now !"}
-                        color={"white"}
+                        text={'Launch a Campaign Now !'}
+                        color={'white'}
                         fontWeight={700}
-                        size={"20px"}
+                        size={'20px'}
                       />
                     </h1>
                   </div>
@@ -496,15 +516,17 @@ function Home() {
                 <Link to='/Home/Login'>
                   <PrimaryButton
                     sx={{
-                      borderRadius: "var(--Pixels-8, 8px)",
-                      fontSize: "1.2rem",
-                      fontWeight: "900",
-                      padding: "15px 28px 15px 28px",
+                      borderRadius: 'var(--Pixels-8, 8px)',
+                      fontSize: '1.2rem',
+                      fontWeight: '900',
+                      padding: '15px 28px 15px 28px',
                     }}
-                    className='py-[15px] px-[28px] my-10'>
+                    className='py-[15px] px-[28px] my-10'
+                  >
                     <div
                       className='mr-2'
-                      style={{ width: 32, height: 32, position: "relative" }}>
+                      style={{ width: 32, height: 32, position: 'relative' }}
+                    >
                       <img src={images.RocketLaunch} alt='' />
                     </div>
                     <div className='max-tablet:text-[1rem]'>
@@ -520,12 +542,14 @@ function Home() {
       <div className='flex-col pt-[60px] pb-[50px] flex-wrap container flex w-full text-center items-center max-tablet:pb-[24px]'>
         <h1
           className='desktop:text-[3rem] font-bold max-desktop:text-[2.25rem] max-tablet:text-[1.5rem]'
-          style={{ fontFamily: "Satoshi", fontWeight: 900 }}>
+          style={{ fontFamily: 'Satoshi', fontWeight: 900 }}
+        >
           Campaign by Category
         </h1>
         <p
           className='text-black/60 font-medium mt-3 max-w-[974px] desktop:text-[1.5rem] desktop:font-bold capitalize text-[#8E95A2] max-desktop:text-[1.25rem] max-tablet:text-[1rem] max-tablet:mt-[24px] max-tablet:font-normal'
-          style={{ fontFamily: "Satoshi" }}>
+          style={{ fontFamily: 'Satoshi' }}
+        >
           Be it for a personal need, social Campaign or a creative idea - you
           can count on us for the project that you want to raise funds for.
         </p>
